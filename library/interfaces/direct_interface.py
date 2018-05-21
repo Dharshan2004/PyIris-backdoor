@@ -4,6 +4,7 @@ import library.commands.global_interface.quit as quit
 import library.commands.global_interface.python as python
 import library.commands.global_interface.local as local
 import library.commands.global_interface.help as help
+import library.commands.scout_interface.execute_command as execute_command
 import library.modules.config as config
 
 config.main()
@@ -36,6 +37,8 @@ def main(scout_id):
                 python.main()
             elif command == 'quit':
                 quit.main()
+            elif command == 'exec':
+                execute_command.main(prompt,scout_id)
             elif not command:
                 pass
             else:
