@@ -1,9 +1,20 @@
 # The PyIris Project
-The PyIris project is a modular, stealthy and flexible remote-access-toolkit. It allows users to dynamically build remote-access 
+The PyIris project is a modular, stealthy and flexible remote-access-toolkit. It allows users to dynamically build remote-access-trojan 
 payloads (referred to as scouts) by loading and unloading specific modules (referred to as components), that grant scouts specific 
 features. This allows you to cut down on file size and only use essential features making it less likely for antivirus to detect the 
 scout. It also allows for highly customisable payloads that have low hard drive footprints as the scout never writes anything to the 
 disk.
+
+# Demo of PyIris in action on multiple operating systems (Windows and Linux)
+## Dynamically generating a payload in Windows
+![Windows Generator Demo](https://user-images.githubusercontent.com/32593795/47714521-0f8ec080-dc78-11e8-8004-490eaff4f4f2.png)
+
+## Remotely controlling a Windows system through a scout in Ubuntu
+![Ubuntu Scout Demo](https://user-images.githubusercontent.com/32593795/47714519-0dc4fd00-dc78-11e8-93b2-8e6811036910.png)
+
+## Creating listeners that will receive connections from the scouts in Kali Linux 
+![Kali listener Demo](https://user-images.githubusercontent.com/32593795/47714529-11f11a80-dc78-11e8-81e7-6f18b3608948.png)
+
 
 # Features (Windows)
 - Dynamic generation of scouts
@@ -27,6 +38,8 @@ disk.
 - Dump saved chrome passwords
 - Take pictures from webcam without writing to disk
 - Compile payloads into Windows EXE
+- Inject keystrokes
+- Disbale/ Enable the targets keyboard/mouse
 
 # Features (Linux)
 - Dynamic generation of scouts
@@ -44,6 +57,7 @@ disk.
 - See all currently open windows on the target
 - Take pictures from webcam without writing to disk
 - Compile payloads into Linux ELF
+- Inject keystrokes
 
 # Getting Started
 ## Prerequisites
@@ -87,7 +101,7 @@ this section is for running the Linux edition of PyIris.
 
 ```pip install -r setup/linux/requirements.txt```
 
-Upon running it the first time you should be greeted with the option to generate a key, this indicated everything has been installed
+Upon running it the first time you should be greeted with the option to generate a key, this indicates everything has been installed
 correctly.
 
 ## Updating PyIris
@@ -95,11 +109,19 @@ Change into the PyIris-backdoor folder first, then run
 
 ```git pull```
 
+On windows to install any newly added third party modules or update then run
+
+```pip install -r setup/windows/requirements.txt```
+
+On linux to install any newly added third party modules or update then run
+
+```pip install -r setup/linux/requirements.txt```
+
 ## Recommended OS
 ### PyIris was succesfully installed on the following operating systems
 - Windows 10
-- Kali Linux
-- Ubuntu
+- Kali Linux Rolling releases
+- Ubuntu 16.04 and future releases
 - Debian
 
 # Basic Usage
@@ -136,8 +158,23 @@ PyHook wheel file that works for your Windows version and download it. Next, pip
 
 If you downloaded the correct pyhook wheel file it should install succesfully.
 
+### Why are there more linux components (backdoor functions) than windows components...
+Well this is due to several reasons. First, is the problem of open source code and mulitple distros. Linux has many distrubutions each 
+linux distro may be different or have a different system structure than each other linux system. Creating components to cover all of 
+them is incredibly difficult. Secondly, is support, simply put some linux systems just dont support some functions out of the box for 
+python. Lastly is the fact that the terminal is much more powerful than cmd, therefore a lot more actions can be accomplished from the 
+terminal than from cmd so there is no need to add extra components, your trusty linux/execute_command_bash will do the job for you
+
+### Why are you using a raw text protocol isn't something like HTTP less suspicious to network analyst
+Yes it is I should probably be using HTTP buuuuut I am just lazy. Perhaps in a future update but that requires rewriting a lot of the 
+listener-scout protocol which could take some time.
+
+### Hey I am a 1337 H4X0R and need to DDOS NSA and The Pentagon can you add a 1337 DDOS component
+No lol
+
 # Built with
-[PyCharm IDE](https://www.jetbrains.com/pycharm/)
+- [PyCharm IDE](https://www.jetbrains.com/pycharm/)
+- My brain
 
 # Want to report a bug?
 Create an issue, but before that please read the "ISSUE_TEMPLATE.md" file first
@@ -146,11 +183,12 @@ Create an issue, but before that please read the "ISSUE_TEMPLATE.md" file first
 - Inspired by [Powershell Empire](https://github.com/EmpireProject/Empire) and [Brain Damage](https://github.com/mehulj94/BrainDamage)
 - Thanks to ev-ev for helping me in the earliest stages of the project and in helping me to create PyIris
 - Thanks to Dharshan2004 for helping build a part of the in-memory webcam module and test PyIris on Debian
+- Thanks to my brain for formulating this whole project
 
 # License
 Licensed under Mozilla Public License Version 2.0 - See the "LICENESE.md" file for more details
 
 # Disclaimer!
-I am not held reponsible for anything illegal that you do with this framework, this framework was developed for ethical hackers, 
-pentesters and for research purposes. Please do not use this without the full consent of the victim. Use this framework to break stuff 
-but legally please :)
+I am not held reponsible for anything illegal or unethical that you do with this framework, this framework was developed for ethical 
+hackers, pentesters and for research purposes as a cyber security project. Please do NOT use this without the full consent of the 
+victim. Use this framework to break stuff but legally please :).

@@ -17,30 +17,39 @@ def main(command):
                             for item in header)) + '\n'
         elif to_show == 'components':
             if config.scout_values['Windows'][0] == 'True':
-                print '\n[*]Generator is set to generate Windows scout'
-                print '[*]All loadable Windows components :'
+                print '\n' + config.inf + 'Generator is set to generate Windows scout'
+                print config.inf + 'All loadable Windows components :'
                 for i in config.win_components:
                     print '   [' + i + '] ' + config.win_components[i]
-                print '   [-] windows/base\n'
+                print ''
             else:
-                print '\n[*]Generator is set to generate Linux scout'
-                print '[*]All loadable Linux components :'
+                print '\n' + config.inf + 'Generator is set to generate Linux scout'
+                print config.inf + 'All loadable Linux components :'
                 for i in config.lin_components:
                     print '   [' + i + '] ' + config.lin_components[i]
-                print '   [-] linux/base\n'
+                print ''
+        elif to_show == 'encoders':
+            print ''
+            print config.inf + 'All encoders :'
+            for i in config.encoders:
+                print '   [' + i + '] ' + config.encoders[i]
+            print ''
         elif to_show == 'loaded':
             if config.scout_values['Windows'][0] == 'True':
-                print '\n[*]Generator is set to generate Windows specific scout'
+                print '\n' + config.inf + 'Generator is set to generate Windows specific scout'
             else:
-                print '[*]Generator is set to generate Linux specific scout'
-            print '[*]Loaded library : '
-            for i in config.loaded_components.values():
-                if i.endswith('/base'):
+                print config.inf + 'Generator is set to generate Linux specific scout'
+            print config.inf + 'Loaded compoonents : '
+            for i in config.loaded_components:
+                if config.loaded_components[i].endswith('/base'):
                     print '   [-] ' + i
                 else:
-                    print '   [' + str(key_from_val.main(config.loaded_components, i)) + '] ' + i
+                    print '   [' + i + '] ' + config.loaded_components[i]
+            print '\n' + config.inf + 'Encoder stack (Scout is encoded by the top encoder first then the next all the way to the bottom) : '
+            for i in range(len(config.loaded_encoders)):
+                print '   [' + str(i) + '] ' + config.loaded_encoders[i]
             print ''
         else:
-            print '[-]Please specify a valid argument, ["options"|"components"|"loaded"]'
+            print config.neg + 'Please specify a valid argument, ["options"|"components"|"loaded"|"encoders"]'
     except IndexError:
-        print '[-]Please specify what to show, ["options"|"components"|"loaded"]'
+        print config.neg + 'Please specify what to show, ["options"|"components"|"loaded"|"encoders"]'

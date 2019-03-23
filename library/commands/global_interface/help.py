@@ -1,3 +1,7 @@
+import library.modules.config as config
+
+config.main()
+
 home_help = '''
 Home Interface Help Menu
 ========================
@@ -31,6 +35,7 @@ Listener Interface Help Menu
       quit              Quit the framework
 
    Listener Commands :
+      bind              Connect to a scout that is using a bind connection
       kill              Kill a listener
       more              Show more information for a listener
       rename            Rename a listener by its ID
@@ -66,7 +71,7 @@ Scout Interface Help Menu
       back              Return to the home interface
 '''
 generator_help = '''
-Home Interface Help Menu
+Generator Interface Help Menu
 ========================
    Global Commands :
       clear             Clear the screen
@@ -77,12 +82,15 @@ Home Interface Help Menu
    
    Generator Commands :
       generate          Start the scout generation
-      load              Load a component in the generator
-      more              Show more info for a component
+      load_com          Load a component in the generator
+      load_enc          Load an encoder in the generator
+      more_com          Show more info for a component
+      more_enc          Show more info for an encoder
       reset             Reset an option to the default value
       set               Set an option to a value
       show              Show all loadable components or options
-      unload            Unload a component in the generator
+      unload_com        Unload a component in the generator
+      unload_enc        Unload an encoder in the generator
    
    Interface Commands :
       back              Return to the home interface
@@ -149,13 +157,18 @@ def home(command):
     elif command == '!':
         print '\nAn alias for the command "local"\n'
     else:
-        print '[-]Please enter a valid command'
+        print config.neg + 'Please enter a valid command'
 
 
 def listener(command):
     if command == 'back':
         print '\nUsage       : back' \
               '\nDescription : Return to the home interface\n'
+    elif command == 'bind':
+        print '\nUsage       : bind <host> <port>' \
+              '\nDescription : Connects to a scout using a bind connection protocol' \
+              '\nOptions     : <host> : Hostname of scout' \
+              '\n              <port> : Port number that remote scout has opened\n'
     elif command == 'clear':
         print '\nUsage       : clear' \
               '\nDescription : Clears the screen\n'
@@ -211,7 +224,7 @@ def listener(command):
     elif command == '!':
         print '\nAn alias for the command "local"\n'
     else:
-        print '[-]Please enter a valid command'
+        print config.neg + 'Please enter a valid command'
 
 
 def scout(command):
@@ -271,15 +284,17 @@ def scout(command):
               '\n              <t>   : An integer in seconds to specify how long to sleep the scout' \
               '\n              "all" : Sleep all scouts for a specific amount of time\n'
     elif command == 'show':
-        print '\nUsage       : show ["scouts"]' \
+        print '\nUsage       : show ["bind"|"reverse"|"scouts"]' \
               '\nDescription : Show all scouts that are connected' \
-              '\nOptions     : "scouts" : Show all scouts that are connected\n'
+              '\nOptions     : "bind"    : Show all scouts that are connected through a bind TCP connection' \
+              '\n              "reverse" : Show all scouts that are connected through a reverse TCP connection' \
+              '\n              "scouts"  : Show all scouts that are connected\n'
     elif command == '?':
         print '\nAn alias for the command "help"\n'
     elif command == '!':
         print '\nAn alias for the command "local"\n'
     else:
-        print '[-]Please enter a valid command'
+        print config.neg + 'Please enter a valid command'
 
 
 def generator(command):
@@ -296,21 +311,30 @@ def generator(command):
         print '\nUsage       : help [opt : <c>]' \
               '\nDescription : Displays the help for a command or the general help menu if no value is provided' \
               '\nOptions     : <c> : The valid name of a command that can be executed in the current handler\n'
-    elif command == 'load':
-        print '\nUsage       : load [<n>|<i>|"all"]' \
+    elif command == 'load_com':
+        print '\nUsage       : load_com [<n>|<i>|"all"]' \
               '\nDescription : Load a component to generate a scout with' \
               '\nOptions     : <n>   : Name of a valid component to load' \
               '\n              <i>   : ID of a valid component to load' \
               '\n              "all" : Load all components\n'
+    elif command == 'load_enc':
+        print '\nUsage       : load_enc [<n>|<i>|"all"]' \
+              '\nDescription : Load an encoder to encode and encrypt a scout with' \
+              '\nOptions     : <n>   : Name of a valid component to load' \
+              '\n              <i>   : ID of a valid component to load\n'
     elif command == 'local':
         print '\nUsage       : local <c>' \
               '\nDescription : Locally executes a shell command and displays the output' \
               '\nOptions     : <c> : A command to execute locally on the system\n'
-    elif command == 'more':
-        print '\nUsage       : more [<n>|<i>]' \
+    elif command == 'more_com':
+        print '\nUsage       : more_com [<n>|<i>]' \
               '\nDescription : Show more advanced info for a scout component' \
               '\nOptions     : <n> : The name of the component to show more info for' \
               '\n              <i> : The ID of the component to shoe more info for\n'
+    elif command == 'more_enc':
+        print '\nUsage       : more_enc [<n>|<i>]' \
+              '\nDescription : Show more advanced info for a scout encoder' \
+              '\nOptions     : <n> : The name of the component to show more info for\n'
     elif command == 'python':
         print '\nUsage       : python' \
               '\nDescription : Enters the systems local python interpreter\n'
@@ -328,14 +352,21 @@ def generator(command):
               '\nOptions     : <o> : The valid option of a listener that can be set' \
               '\n              <v> : The value to set that option to\n'
     elif command == 'show':
-        print '\nUsage       : show ["options"|"components"|"loaded"]' \
+        print '\nUsage       : show ["options"|"components"|"loaded"|"encoders"]' \
               '\nDescription : Show all mutable options or loadable components' \
               '\nOptions     : "options"    : Options that can be changed' \
               '\n              "components" : All loadable scout components' \
-              '\n              "loaded"     : All currently loaded scout components\n'
-    elif command == 'unload':
-        print '\nUsage       : unload [<n>|<i>|"all"]' \
+              '\n              "loaded"     : All currently loaded scout components' \
+              '\n              "encoders"   : All useable encoders\n'
+    elif command == 'unload_com':
+        print '\nUsage       : unload_com [<n>|<i>|"all"]' \
               '\nDescription : Unload a component to generate a scout with' \
+              '\nOptions     : <n>   : Name of a valid component to unload' \
+              '\n              <i>   : ID of a valid component to unload' \
+              '\n              "all" : Unload all components\n'
+    elif command == 'unload_enc':
+        print '\nUsage       : unload_enc [<n>|<i>|"all"]' \
+              '\nDescription : Unload an encoder that encodes and encrypts a scout' \
               '\nOptions     : <n>   : Name of a valid component to unload' \
               '\n              <i>   : ID of a valid component to unload' \
               '\n              "all" : Unload all components\n'
@@ -344,13 +375,12 @@ def generator(command):
     elif command == '!':
         print '\nAn alias for the command "local"\n'
     else:
-        print '[-]Please enter a valid command'
+        print config.neg + 'Please enter a valid command'
 
 
 def main(interface, command):
     command = command.split(' ')
     filter(lambda a: a != '', command)
-    print command
     if interface == 'home':
         try:
             home(command[1])
