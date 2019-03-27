@@ -9,8 +9,12 @@ linux_modules = []
 def main():
     try:
         import sys
+        import rsa
         import time
         import os
+        (pubkey, privkey) = rsa.newkeys(512)
+        config.public_key = pubkey
+        config.private_key = privkey
         if os.name == 'nt':
             import colorama
             colorama.init()

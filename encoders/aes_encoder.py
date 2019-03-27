@@ -1,5 +1,5 @@
 import library.modules.config as config
-from base64 import b64encode
+import base64
 
 config.main()
 
@@ -9,14 +9,14 @@ def main(option, filepath=None):
         filepath = config.scout_values['Path'][0]
     if option == 'encode':
         try:
-            imported_modules = ['from Crypto.Cipher import AES']
+            imported_modules = ['from Crypto.Cipher import AES', 'import base64']
             with open(filepath, 'r') as f:
                 data = f.read().replace(';', '\n')
             source = data.split('\n')
             for i in source:
                 if 'import' in i and i != 'from Crypto.Cipher import AES':
                     imported_modules.append(i)
-            obfuscated = ';'.join(imported_modules) + ';exec(b64decode("' + b64encode('\n'.join(source)) + '"))'
+            obfuscated = ';'.join(imported_modules) + ';exec(base64.b64decode("' + base64.b64encode('\n'.join(source)) + '"))'
             with open(filepath, 'w') as f:
                 f.write(obfuscated)
                 print '   ' + config.inf + 'Encoded scout and overwrote raw file with AES encoded file contents'

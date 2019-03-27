@@ -30,6 +30,8 @@ def main():
     scout_database = {}
     black_list = []
     white_list = []
+    public_key = ''
+    private_key = ''
     win_components = collections.OrderedDict()
     tmp_counter = 0
     iterdir = list(get_all_modules.main(os.getcwd() + '/components/windows'))

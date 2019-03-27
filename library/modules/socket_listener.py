@@ -2,6 +2,8 @@ import socket
 import library.modules.config as config
 import library.modules.should_listener_die as should_listener_die
 import library.modules.return_random_string as return_random_string
+import library.modules.recv_all as recv_all
+import pickle
 from datetime import datetime
 
 config.main()
@@ -42,14 +44,19 @@ def main(host, port, name):
                         await_key = conn.recv(9999999)
                         conn.settimeout(None)
                         if await_key == config.key:
-                            print '\n' + config.pos + 'Connection received from scout : ' + addr[0] + ':' + str(
-                                addr[1]) + ' -> ' + host + ':' + str(port)
-                            config.scout_database[str(config.incremented_scout_id)] = [conn, addr[0], str(addr[1]),
-                                                                                       host + ':' + str(port),
-                                                                                       return_random_string.main(5),
-                                                                                       datetime.now().strftime(
-                                                                                           '%Y-%m-%d %H:%M:%S'),
-                                                                                       'Reverse']
+                            s.sendall('response')
+                            data = recv_all(conn)
+                            conn.settimeout(100)
+                            if data[:4] == 'key:' :
+                                key = pickle.loads(data[4:])
+                                print '\n' + config.pos + 'Connection received from scout : ' + addr[0] + ':' + str(
+                                    addr[1]) + ' -> ' + host + ':' + str(port)
+                                config.scout_database[str(config.incremented_scout_id)] = [conn, addr[0], str(addr[1]),
+                                                                                           host + ':' + str(port),
+                                                                                           return_random_string.main(5),
+                                                                                           datetime.now().strftime(
+                                                                                               '%Y-%m-%d %H:%M:%S'),
+                                                                                           'Reverse', key]
                             config.incremented_scout_id += 1
                         else:
                             conn.close()
